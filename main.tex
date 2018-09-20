@@ -1,0 +1,115 @@
+\documentclass[12pt]{article}
+ \usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts, physics}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+ 
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+%If you want to title your bold things something different just make another thing exactly like this but replace "problem" with the name of the thing you want, like theorem or lemma or whatever
+
+
+
+\begin{document}
+ 
+%\renewcommand{\qedsymbol}{\filledbox}
+%Good resources for looking up how to do stuff:
+%Binary operators: http://www.access2science.com/latex/Binary.html
+%General help: http://en.wikibooks.org/wiki/LaTeX/Mathematics
+%Or just google stuff
+ 
+\title{IFT 6390 Homework 1}
+\author{Author}
+\maketitle
+ 
+\begin{problem}{1}
+Small exercise on probabilities
+\end{problem}
+ 
+\begin{proof}
+p
+\end{proof}
+
+%%%%%%%% part 3.1 %%%%%%%%
+\begin{problem}{3.1 (a)}
+Name parameters
+\end{problem}
+
+\begin{proof}
+the parameters are $\sigma$ and $\mu$\\
+$\mu \in (d , 1)$ \\
+The matrix $\Sigma$ is d by d, where the diagonal terms are $\sigma$
+\end{proof}
+
+\begin{problem}{3.1 (b)}
+Equation for optimal parameters
+\end{problem}
+
+\begin{proof}
+\begin{equation*}
+\mu = \frac{1}{n} \sum_{i=1}^{n} x_i
+\end{equation*}
+
+\begin{equation*}
+\sigma = \frac{1}{n} \sum_{i=1}^{n} (x_i - \mu) (x_i - \mu)^T 
+\end{equation*}
+\end{proof}
+
+\begin{problem}{3.1 (c)}
+What is the algorithmic complexity of this training method, i.e. of the method calculating these parameters?
+\end{problem}
+
+\begin{proof}
+% will make pseudo code prettier
+To computer $\mu$: \\
+for i $=$ 1 to n \\
+sum each $x_i$ with $d$ components\\
+endfor\\
+Total is $O(nd)$
+
+To computer $\sigma$: \\
+for i $=$ 1 to n \\
+ subtract $\mu$ from each $x_i$ with $d$ components\\
+ repeat the last operation with transpose
+ multiply $d$ by $1$ and  $1$ by $d$ vectors, result in a $d$ by $d$ matrix, which is $d^2$ operations
+endfor\\
+Total is $O(nd^2 + d + d ) = O(nd^2)$
+
+\end{proof}
+
+%%%%%%%% part 3.4 %%%%%%%%
+\begin{problem}{3.4 (a)}
+Express the equation of a diagonal Gaussian density in Rd. Specify what are its parameters and their dimensions.
+\end{problem}
+
+\begin{proof}
+\begin{equation*}
+\prod_{i=1}^{D} (2\pi \sigma_{i})^{\frac{1}{2}} exp\{{- \sum_{i=1}^{D}} \frac{1}{2 \sigma_{i} ^2} (x_{i} - \mu_{i})^2 \} 
+\end{equation*}
+\end{proof}
+
+
+\begin{problem}{3.4 (b)}
+Show that the components of a random vector following a diagonal Gaussian distribution are independent random variables.
+\end{problem}
+
+\begin{proof}
+First, let us walk through the idea. We would like to prove the independence by proving that the product of each normal distribution's density function made up of the each component of the random vector is equal to the diagonal Gaussian distribution's density function, namely the random vector's density distribution. \\
+
+The Gaussian density function for dataset $D$ is defined as \\
+
+\begin{equation*}
+\begin{split}
+p(x) &= \mathcal{N}_{\mu, \Sigma}(x) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} exp(-\frac{1}{2}(x - \mu)^T \Sigma^{-1} (x - \mu)) \\
+&\intertext{Since we have a diagonal $\Sigma$, it can be written in the form of a summation in the power of exponent, and then transformed into a product of exponents}
+p(x) &= \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} \\
+\end{split}
+\end{equation*}
+
+
+
+\end{proof}
+
+\end{document}
