@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
  \usepackage[margin=1in]{geometry} 
-\usepackage{amsmath,amsthm,amssymb,amsfonts, physics}
+\usepackage{amsmath,amsthm,amssymb,amsfonts, physics,bbold, bm}
  
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -97,18 +97,47 @@ Show that the components of a random vector following a diagonal Gaussian distri
 
 \begin{proof}
 First, let us walk through the idea. We would like to prove the independence by proving that the product of each normal distribution's density function made up of the each component of the random vector is equal to the diagonal Gaussian distribution's density function, namely the random vector's density distribution. \\
-
 The Gaussian density function for dataset $D$ is defined as \\
 
 \begin{equation*}
-\begin{split}
-p(x) &= \mathcal{N}_{\mu, \Sigma}(x) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} exp(-\frac{1}{2}(x - \mu)^T \Sigma^{-1} (x - \mu)) \\
-&\intertext{Since we have a diagonal $\Sigma$, it can be written in the form of a summation in the power of exponent, and then transformed into a product of exponents}
-p(x) &= \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} \\
-\end{split}
+%\begin{split}
+p(\bm{x}) = \mathcal{N}_{\mu, \Sigma}(\bm{x}) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} exp(-\frac{1}{2}(\bm{x} - \mu)^T \Sigma^{-1} (\bm{x} - \mu)) 
 \end{equation*}
 
+Since we have a diagonal $\Sigma$, it can be written in the form of a summation of the diagonal terms in the power, and then transformed into a product of exponents. Note that $\sigma_{ii}$ here refers to the diagonal terms.
 
+\begin{equation*}
+p(\bm{x}) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} exp(\sum_{i=1}^{d} \frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
+\end{equation*}
+
+\begin{equation*}
+p(\bm{x}) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} \prod_{i=1}^{d} exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2)
+\end{equation*}
+
+we can also express the constant term in a product form
+
+\begin{equation*}
+\frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}}  = \prod_{i=1}^{d} \frac{1}{(2\pi)^{1/2} \sigma_{ii} } =  \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} }
+\end{equation*}
+
+also, note that the determinant of a diagonal matrix is the product of the diagonal terms
+
+\begin{equation*}
+det(\Sigma) = \prod_{i=1}^{d} \sigma_{ii}^2
+\end{equation*}
+
+Now, we have the expression for $p(\bm{x})$
+\begin{equation*}
+p(\bm{x}) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } \prod_{i=1}^{d} exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
+\end{equation*}
+
+Note that $\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2)$ is a Gaussian of $\mathcal{N}(\sigma_{ii}, \mu)$
+
+Therefore, we have
+
+\begin{equation*}
+p(\bm{x}) = \prod_{i =1}^{d} \mathcal{N}(\sigma_{ii}, \mu)
+\end{equation*}
 
 \end{proof}
 
