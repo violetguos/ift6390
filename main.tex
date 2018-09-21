@@ -79,6 +79,57 @@ Total is $O(nd^2 + d + d ) = O(nd^2)$
 
 \end{proof}
 
+
+%%%%%%%%%%%part 3.2%%%%%%%%%%%%%
+\begin{problem}{3.2(a)}
+Suppose that the user has fixed $\sigma$ What does the "training/learning" phase of these Parzen windows consist of?
+\end{problem}
+\begin{proof}
+Center at each $x$, calculate normal density function with $\sigma$
+\end{proof}
+
+\begin{problem}{3.2(b)}
+For a test point x, write in a single detailed formula (i.e. with exponentials), the function that will give the probability density predicted at point $x$: $p_{parzen}(x) = $?
+\end{problem}
+\begin{proof}
+\begin{equation*}
+\hat{p}_{Parzen}(x) = \sum_{i = 1}^{n} \frac{1}{(2\pi \sigma^2)^{d/2}} exp(\frac{1}{2} \frac{\abs{x - \mu}^2}{\sigma})
+\end{equation*}
+\end{proof}
+
+\begin{problem}{3.2(c)}
+ What is the algorithmic complexity for calculating this prediction at each new point x?
+\end{problem}
+
+\begin{proof}
+$O(N)$, since there are n terms and all have fixed $\sigma$ and $\mu$
+\end{proof}
+
+%%%%%%%%%%%%%%%%%part 3.3%%%%%%%%%%%%%%%%%%%%%
+\begin{problem}{3.3(a)}
+Which one of these two approaches (parametric Gaussian v.s. Parzen Gaussian kernel) has the highest capacity (in other words, higher expressivity)? Explain
+\end{problem}
+\begin{proof}
+Parzen
+\end{proof}
+
+
+\begin{problem}{3.3(b)}
+With which one of these approaches, and in which scenario, are we likely to be over-fitting (i.e. memorizing the noise in our data)?
+\end{problem}
+\begin{proof}
+Parzen
+\end{proof}
+
+\begin{problem}{3.3(c)}
+Hyperparam vs param
+\end{problem}
+
+\begin{proof}
+to do
+\end{proof}
+
+
 %%%%%%%% part 3.4 %%%%%%%%
 \begin{problem}{3.4 (a)}
 Express the equation of a diagonal Gaussian density in Rd. Specify what are its parameters and their dimensions.
@@ -107,11 +158,11 @@ p(\bm{x}) = \mathcal{N}_{\mu, \Sigma}(\bm{x}) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\
 Since we have a diagonal $\Sigma$, it can be written in the form of a summation of the diagonal terms in the power, and then transformed into a product of exponents. Note that $\sigma_{ii}$ here refers to the diagonal terms.
 
 \begin{equation*}
-p(\bm{x}) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} exp(\sum_{i=1}^{d} \frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
+p(\bm{x}) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} exp(\sum_{i=1}^{d} -\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
 \end{equation*}
 
 \begin{equation*}
-p(\bm{x}) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} \prod_{i=1}^{d} exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2)
+p(\bm{x}) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} \prod_{i=1}^{d} exp -(\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2)
 \end{equation*}
 
 we can also express the constant term in a product form
@@ -128,7 +179,7 @@ det(\Sigma) = \prod_{i=1}^{d} \sigma_{ii}^2
 
 Now, we have the expression for $p(\bm{x})$
 \begin{equation*}
-p(\bm{x}) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } \prod_{i=1}^{d} exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
+p(\bm{x}) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } \prod_{i=1}^{d} exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
 \end{equation*}
 
 Note that $\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2)$ is a Gaussian of $\mathcal{N}(\sigma_{ii}, \mu)$
@@ -137,6 +188,42 @@ Therefore, we have
 
 \begin{equation*}
 p(\bm{x}) = \prod_{i =1}^{d} \mathcal{N}(\sigma_{ii}, \mu)
+\end{equation*}
+
+\end{proof}
+
+\begin{problem}{3.4(c)}
+Using ? log p(x) as the loss, write down the equation correspond- ing to the empirical risk minimization on the training set D
+\end{problem}
+\begin{proof}
+From part b, we have
+\begin{equation*}
+p(\bm{x}) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
+\end{equation*}
+
+\begin{equation*}
+-log p(X) = -log (\prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
+\end{equation*}
+\begin{equation*}
+-log p(X) =\sum_{i=1}^{d}  -log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
+\end{equation*}
+
+\begin{equation*}
+-log p(X) = \sum_{i=1}^{d}  -log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } - \sum_{i=1}^{d} log(exp( -(\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) ))
+\end{equation*}
+
+\begin{equation*}
+-log p(X) = \sum_{i=1}^{d} log ((2\pi \sigma_{ii}^2)^{1/2}  + \sum_{i=1}^{d}  (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
+\end{equation*}
+
+\begin{equation*}
+\hat{R}(f, D) = \frac{1}{\abs{D}} \sum_{(x , y)\in D} L(f(x), y)
+\end{equation*}
+\begin{equation*}
+\hat{R}(f, D) = \frac{1}{\abs{D}} \sum_{(x , y)\in D} -log(p(X))
+\end{equation*}
+\begin{equation*}
+\hat{R}(f, D) =\frac{1}{\abs{D}} \sum_{(x , y)\in D} \sum_{i=1}^{d} log ((2\pi \sigma_{ii}^2)^{1/2}  + \sum_{i=1}^{d}  (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
 \end{equation*}
 
 \end{proof}
