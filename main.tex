@@ -1,18 +1,48 @@
-\documentclass[12pt]{article}
- \usepackage[margin=1in]{geometry} 
-\usepackage{amsmath,amsthm,amssymb,amsfonts, physics,bbold, bm}
- 
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\Z}{\mathbb{Z}}
- 
- 
-\newenvironment{problem}[2][Problem]{\begin{trivlist}
-\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
-%If you want to title your bold things something different just make another thing exactly like this but replace "problem" with the name of the thing you want, like theorem or lemma or whatever
+\documentclass{article} 
+
+\usepackage[margin=0.75in]{geometry}
+\usepackage{tabularx}
+\usepackage{amsmath,amsthm,amssymb,enumerate,graphicx,leading}
+\usepackage{amsmath,amsthm,amssymb,amsfonts, physics,bbold, bm, fancyvrb}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\usepackage[justification=centering]{caption}
+\leading{18pt}
+\newtheorem{problem}{Problem} 
+
+\theoremstyle{definition} 
+
+\newtheorem*{solution}{Solution} 
+
+\begin{document} 
+
+\def\lc{\left\lceil}   
+\def\rc{\right\rceil}
+\def\lf{\left\lfloor}
+\def\rf{\right\rfloor}
 
 
-
-\begin{document}
  
 %\renewcommand{\qedsymbol}{\filledbox}
 %Good resources for looking up how to do stuff:
@@ -21,211 +51,334 @@
 %Or just google stuff
  
 \title{IFT 6390 Homework 1}
-\author{Author}
+\author{Arlie Coles (20121051) and Violet Guo ()}
 \maketitle
- 
-\begin{problem}{1}
-Small exercise on probabilities
-\end{problem}
- 
-\begin{proof}
-p
-\end{proof}
 
-%%%%%%%% part 3.1 %%%%%%%%
-\begin{problem}{3.1 (a)}
-Name parameters
+%%% Problem 1 - please double check my math! Bayes' rule is apparently hard ;) %%%
+\begin{problem}
+Small exercise on probabilities.
 \end{problem}
 
-\begin{proof}
-the parameters are $\sigma$ and $\mu$\\
-$\mu \in (d , 1)$ \\
-The matrix $\Sigma$ is d by d, where the diagonal terms are $\sigma$
-\end{proof}
+\begin{solution}\
+	First, we let:
+	\begin{itemize}
+    	\item the probability of a woman having cancer be $P(C) = 0.015$,
+    	\item the probability of a test for cancer being positive, given that a woman has cancer, be $P(T|C) = 0.87$,
+        \item the probability of a test for cancer being positive, given that a woman does not have cancer, be $P(T|\neg C) = 0.096$.
+     \end{itemize}
+     
+     Then, to find the probability that a woman who has received a positive result actually has cancer, $P(C|T)$, we apply Bayes' Rule:
+     \begin{equation*}
+     	\begin{split}
+     		P(C|T) & = \dfrac{P(T|C)P(C)}{P(T)}\\
+     		& = \dfrac{(0.87)(0.015)}{(0.87+0.096)}\\
+            & = 0.0135
+        \end{split}
+     \end{equation*}
+     
+     Therefore, the doctors surveyed ought to have responded with \textit{F) Less than 10\%}.
+     
+\end{solution}\
 
-\begin{problem}{3.1 (b)}
-Equation for optimal parameters
+%%% Problem 2 %%%
+\begin{problem}
+Curse of dimensionality and geometric intuition in higher dimensions.
 \end{problem}
 
-\begin{proof}
-\begin{equation*}
-\mu = \frac{1}{n} \sum_{i=1}^{n} x_i
-\end{equation*}
+\begin{solution}\
+	\begin{enumerate}[1.]
+    	\item Volume can be generalized in $d$ dimensions as $V = c^{d}$.
+        
+        \item Since the probability density is zero anywhere outside the cube, we know that the integral of the probability density function over the volume must be equal to 1:
+        
+        \begin{equation*}
+            	1 = \int_{V} p(x) dx
+        \end{equation*}
+        
+        And since the probability distribution is uniform, we can move it outside of the integral as it is a constant:
+        
+        \begin{equation*}
+        	\begin{split}
+            	1 & = p(x) \int_{V} dx\\
+                & = p(x)V\\
+                & = p(x)c^{d}\\
+                \Rightarrow p(x) & = \dfrac{1}{c^{d}}.
+            \end{split}
+        \end{equation*}
+        
+        \item We can define the volume of the interior cube as $(0.94c)^{d}$. Since the volume of the exterior cube is $c^{d}$, we can define the volume of the outer shell as $c^{d} - (0.94c)^{d} = c^{d}(1-0.94^{d})$.
+        
+        Then, the probability of a generated point $x$ falling within the shell is:
+        
+        \begin{equation*}
+        	\begin{split}
+            	P(\text{shell}) & = \int_{V} p(x) dx \\
+                & = \dfrac{1}{c^{d}} \int_{V} dx \\
+                & = \dfrac{1}{c^{d}} c^{d} (1-0.94^{d}) \\
+                & = 1 - 0.94^{d}.
+            \end{split}
+        \end{equation*}
+        
+        The probability of a generated point $x$ falling in the smaller interior hypercube is:
+        
+        \begin{equation*}
+        	\begin{split}
+            	P(\text{interior}) & = \int_{V} p(x) dx \\
+                & = \dfrac{1}{c^{d}} \int_{V} dx \\
+                & = \dfrac{1}{c^{d}} (0.94^{d})(c^{d}) \\& = 0.94^{d}.
+            \end{split}
+        \end{equation*}
+        
+        \item Changing values of $d$: \\
+        	\begin{center}
+        	\begin{tabular}{l l l}
+            	$d = 1:$ & $1 - 0.94^{1}$ & $= 0.06$ \\
+                $d = 2:$ & $1 - 0.94^{2}$ & $= 0.1164$ \\
+                $d = 3:$ & $1 - 0.94^{3}$ & $= 0.1694$ \\
+                $d = 5:$ & $1 - 0.94^{5}$ & $= 0.2661$ \\
+                $d = 10:$ & $1 - 0.94^{10}$ & $= 0.4614$ \\
+                $d = 100:$ & $1 - 0.94^{100}$ & $= 0.9979$ \\
+                $d = 1000:$ & $1 - 0.94^{1000}$ & $\approx 1$ \\
+        	\end{tabular}
+           	\end{center}
+        
+        \item In higher dimensions, it seems that the distribution of points is much more concentrated around the ``edges'' of the given ``space'', which runs counter to intuition in smaller dimensions about uniform distributions, where we suppose that there is not a relationship between location in the space and the value given by the probability density function.
+        
+    \end{enumerate}
+\end{solution}
 
-\begin{equation*}
-\sigma = \frac{1}{n} \sum_{i=1}^{n} (x_i - \mu) (x_i - \mu)^T 
-\end{equation*}
-\end{proof}
-
-\begin{problem}{3.1 (c)}
-What is the algorithmic complexity of this training method, i.e. of the method calculating these parameters?
+%%% Problem 3 %%%
+\begin{problem}
+Parametric Gaussian density estimation vs. Parzen window density estimation
 \end{problem}
 
-\begin{proof}
-% will make pseudo code prettier
-To computer $\mu$: \\
-for i $=$ 1 to n \\
-sum each $x_i$ with $d$ components\\
-endfor\\
-Total is $O(nd)$
+\begin{solution}\
+	\begin{enumerate}[1.]
+    	\item %%% Gaussian density %%%
+        	\begin{enumerate}[(a)]
+            	\item An isotropic Gaussian has two parameters:
+                	\begin{itemize}
+                    	\item $\mu$, the mean, of dimension $d$, and
+                        \item $\sigma^{2}$, the variance, of dimension $1$. (Note that the covariance matrix $\Sigma$ is of dimension $d \times d$, where the diagonal terms are all $\sigma^{2}$.)
+                    \end{itemize}
+                    
+                 \item For calculating the mean:
+                 	\begin{equation*}
+						\mu = \frac{1}{n} \sum_{i=1}^{n} x_i
+					\end{equation*}
+                    
+                 	For calculating the variance:
+                    \begin{equation*}
+						\Sigma = \frac{1}{n} \sum_{i=1}^{n} (x_i - \mu) (x_i - \mu)^T 
+					\end{equation*}
+                    
+                    Then, we arrive at $\sigma^{2}$ by decomposing the resulting matrix (which is all zeros excepting the $\sigma^{2}$'s on the diagonal, since the Gaussian is isotropic) into the following form, where the value of $\sigma^{2}$ is apparent:
+                    \begin{equation*}
+                    	\Sigma = \sigma^{2} I
+                    \end{equation*}
+                    
+                  \item We can describe the complexity-affecting parts of the $\mu$-calculating algorithm like so:
+\lstset{language=} % This removes syntax highlighting which we don't need for such simple pseudocode                  
+\begin{lstlisting}
+for i = 1 to n:																				\\ O(n)
+	add x_i to the running total, which has d components							\\ O(d)
+\end{lstlisting}
+					This is $O(nd)$.
+                
+                  	We can describe the complexity-affecting parts of the $\sigma$-calculating algorithm like so:
+\begin{lstlisting}
+for i = 1 to n:																				\\ O(n)
+	subtract mu from x_i, both with d components										\\ O(d)
+    repeat the previous operation														\\ O(d)
+    take its transpose																		\\ O(1)
+    multiply the resulting dx1 and 1xd vectors to get a dxd matrix		\\ O(d^2)    				
+\end{lstlisting}
+					This is $O(n(d+d+1+d^{2})) = O(n(d+d^{2}))$.
+                    % You had: "Total is $O(nd^2 + d + d ) = O(nd^2)$"
+                    
+                    The complexity of calculating both parameters is then $O(nd + nd + nd^{2}) = O(nd + nd^{2}) = O(n(d+d^{2}))$.
+                 
+                 \item The probability density function is:
+                 	\begin{equation*}
+                    	\begin{split}
+                    		\hat{p}_{gauss-isotrop}(x) & = \mathcal{N}_{\mu, \sigma^{2}}\\
+                            & = \dfrac{1}{(2\pi)^{d/2}\sigma^{d}} \exp( \frac{-1}{2} \frac{||x-\mu||^{2}} {\sigma^{2}} )
+                        \end{split}
+                    \end{equation*}
+                 
+                 \item Calculating a prediction from $p(x)$ at a given $x$ only uses one data point, so it is not dependent on $n$. Subtracting $\mu$ from $x$ in the exponent, however, is dependent on $d$ since each has $d$ components. Therefore the complexity is $O(d)$.
+                 
+            \end{enumerate}
+            
+    	\item %%% Parzen density %%%
+        	\begin{enumerate}[(a)]
+            	\item The ``training/learning'' phase for the Parzen method consists of loading each training point. We center each kernel Gaussian on each training point, which becomes the $\mu$ of the Gaussian, whose $\sigma$ is predefined.
+                % You had "Center at each $x$, calculate normal density function with $\sigma$" but I think the calculating is part of testing? 
+                
+                \item The probability density function is:
+                	\begin{equation*}
+                    	\hat{p}_{Parzen}(x) = \sum_{i = 1}^{n} \frac{1}{(2\pi)^{d/2}\sigma^{d}} \exp(\frac{-1}{2} \frac{||x - \mu||^2}{\sigma})
+                    \end{equation*}
+                    
+                \item The complexity for calculating a prediction is $O(nd)$, since we must perform the $x - \mu$ subtraction, which deals with $d$ components, $n$ times. % I wonder if squaring the x - mu vector adds complexity?
+                    
+            \end{enumerate}
+        
+        \item %%% Capacity/expressivity %%%
+        	\begin{enumerate}[(a)]
+            	\item The Parzen approach has a higher capacity/expressivity. Taking the sum over a set of kernels, where the kernels can be close together or far apart depending on the distribution of the data, allows for a highly nuanced density curve to emerge, while the parametric Gaussian approach is restricted to a density curve delimited in shape by the definition of a single Gaussian.
+                
+                \item The Parzen approach is also more likely to overfit and memorize noise, for the same reason. Its direct incorporation of the location of each datapoint as summands to the final density curve means that noise will contribute just as well to the final density curve as the good data, while the parametric Gaussian approach generalizes this effect somewhat by using averages over the whole dataset and conforming to a less-nuanced shape.
+                
+                \item Hyperparameter question - to be answered.
+            \end{enumerate}
+        
+        \item %%% Diagonal Gaussians - please have a look here! I think there may be a sigma vs sigma-squared issue, or I may just not be following the math correctly.
+        	\begin{enumerate}[(a)]
+            	\item To derive the equation of a diagonal Gaussian density with dimension $d$, we can start with the general Gaussian density:
+                
+                	\begin{equation*}
+                    	p(x) = \dfrac{1}{(2\pi)^{d/2} \sqrt{|\Sigma|}} \exp(\frac{-1}{2}(x-\mu)^{T}\Sigma^{-1}(x-\mu))
+                    \end{equation*}
+                    
+                Then, since the only filled positions in the $\Sigma$ matrix are the diagonals, we can manually represent the matrix multiplication while skipping the calculations in the matrix multiplication that do not interact with that diagonal:
+                	\begin{equation*}
+                		p(x) = \dfrac{1}{(2\pi)^{d/2} \sqrt{|\Sigma|}} \exp( \frac{-1}{2} \sum_{i=1}^{d} \frac{1}{\sigma_{ii}^{2}} (x_{i} - \mu_{i})^{2} )
+                	\end{equation*}
+                
+                The above makes use of the fact that a transpose of a matrix symmetric about the diagonal is itself. Then, if we like, we can further represent the constant normalization term in product notation, using the fact that the determinant of a diagonal matrix is equal to the product of the diagonal terms:
+                
+                \begin{equation*}
+                	\begin{split}
+                    	p(x) & = \dfrac{1}{(2\pi)^{d/2} \prod_{i=1}^{d} \sigma^{2}_{ii}} \exp( \frac{-1}{2} \sum_{i=1}^{d} \frac{1}{\sigma_{ii}^{2}} (x_{i} - \mu_{i})^{2} ) \\
+                        & = \prod_{i=1}^{d} \frac{1}{(2\pi)^{1/2} \sigma_{ii} } \exp( \frac{-1}{2} \sum_{i=1}^{d} \frac{1}{\sigma_{ii}^{2}} (x_{i} - \mu_{i})^{2} ) \\
+                        & = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } \exp( \frac{-1}{2} \sum_{i=1}^{d} \frac{1}{\sigma_{ii}^{2}} (x_{i} - \mu_{i})^{2} )
+                    \end{split}
+                \end{equation*}
+                
+                	%%% I'm not sure how to make this (your original equation) work-- maybe missing a negative in the exponent?
+                	%\begin{equation*}
+						%\prod_{i=1}^{D} (2\pi \sigma_{i})^{\frac{1}{2}} \exp(- 							\sum_{i=1}^{D} \frac{1}{2 \sigma_{i} ^2} (x_{i} - \mu_{i})^2 ) 
+					%\end{equation*}
+                    
+                    The parameters of the diagonal Gaussian are:
+                    \begin{itemize}
+                    	\item $\mu$, the mean, of dimension $d$, and
+                        \item $\Sigma$, the covariance matrix, of dimension $d \times d$.
+                    \end{itemize}
+                    
+            	\item 
+                	\begin{proof}
+                    	Show that the components of a random vector following a diagonal Gaussian distribution are independent random variables.
+                        
+                        First, let us walk through the idea. We would like to prove the independence of the components of a diagonal Gaussian by proving that the product of each normal distribution's density function made up of each component of the random vector is equal to the diagonal Gaussian distribution's density function, namely the random vector's density distribution.
+                        
+                        The Gaussian density function for dataset $D$ is defined as:
+                        
+                        \begin{equation*}
+							\begin{split}
+								p(\bm{x}) & = \mathcal{N}_{\mu, \Sigma}(\bm{x})\\
+                                & = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} \exp(-\frac{1}{2}(\bm{x} - \mu)^T \Sigma^{-1} (\bm{x} - \mu))
+                            \end{split}
+						\end{equation*}
+                        
+                        Since we have a diagonal $\Sigma$, it can be written in the form of a summation of the diagonal terms in the power, and then transformed into a product of exponents. Note that $\sigma_{ii}$ here refers to the diagonal terms:
+                        
+                        \begin{equation*}
+                        	\begin{split}
+							p(\bm{x}) & = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} \exp(\sum_{i=1}^{d} -\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) \\
+                            & = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} \prod_{i=1}^{d} \exp -\left(\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2\right)
+                            \end{split}
+						\end{equation*}
+                        
+                        As above, we can also express the constant term in a product form, giving us  the expression for $p(\bm{x})$:
+                        
+						\begin{equation*}
+                        	\begin{split}
+								p(\bm{x}) & = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } \prod_{i=1}^{d} \exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) \\
+                                & = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } \exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
+                            \end{split}
+						\end{equation*}
+                        
+                        	Note that $\dfrac{1}{(2\pi \sigma_{ii}^2)^{1/2} } \exp (\dfrac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2)$ is a Gaussian with parameters $\mathcal{N}(\mu, \sigma_{ii})$.
 
-To computer $\sigma$: \\
-for i $=$ 1 to n \\
- subtract $\mu$ from each $x_i$ with $d$ components\\
- repeat the last operation with transpose
- multiply $d$ by $1$ and  $1$ by $d$ vectors, result in a $d$ by $d$ matrix, which is $d^2$ operations
-endfor\\
-Total is $O(nd^2 + d + d ) = O(nd^2)$
+						Thus, we have:
 
-\end{proof}
-
-
-%%%%%%%%%%%part 3.2%%%%%%%%%%%%%
-\begin{problem}{3.2(a)}
-Suppose that the user has fixed $\sigma$ What does the "training/learning" phase of these Parzen windows consist of?
-\end{problem}
-\begin{proof}
-Center at each $x$, calculate normal density function with $\sigma$
-\end{proof}
-
-\begin{problem}{3.2(b)}
-For a test point x, write in a single detailed formula (i.e. with exponentials), the function that will give the probability density predicted at point $x$: $p_{parzen}(x) = $?
-\end{problem}
-\begin{proof}
-\begin{equation*}
-\hat{p}_{Parzen}(x) = \sum_{i = 1}^{n} \frac{1}{(2\pi \sigma^2)^{d/2}} exp(\frac{1}{2} \frac{\abs{x - \mu}^2}{\sigma})
-\end{equation*}
-\end{proof}
-
-\begin{problem}{3.2(c)}
- What is the algorithmic complexity for calculating this prediction at each new point x?
-\end{problem}
-
-\begin{proof}
-$O(N)$, since there are n terms and all have fixed $\sigma$ and $\mu$
-\end{proof}
-
-%%%%%%%%%%%%%%%%%part 3.3%%%%%%%%%%%%%%%%%%%%%
-\begin{problem}{3.3(a)}
-Which one of these two approaches (parametric Gaussian v.s. Parzen Gaussian kernel) has the highest capacity (in other words, higher expressivity)? Explain
-\end{problem}
-\begin{proof}
-Parzen
-\end{proof}
+						\begin{equation*}
+							p(\bm{x}) = \prod_{i =1}^{d} \mathcal{N}(\mu, \sigma_{ii})
+						\end{equation*}
+                    
+                    Therefore, the diagonal Gaussian density function is equal to the product of the individual components' density functions, and the individual components are independent.
+                    \end{proof}
+                    
+                    
+            	\item Empirical risk can be written as:
+                	\begin{equation*}
+                    	\begin{split}
+							\hat{R}(f, D) & = \dfrac{1}{|D|} \sum_{(x, y) \in D} L(f(x), y) \\
+                            & = \dfrac{1}{|D|} \sum_{(x, y) \in D} -\log(p(x))
+						\end{split}
+                    \end{equation*}
+                    
+                    Substituting from the previous part, we have:
+                    \begin{equation*}
+                    	\begin{split}
+                        	\hat{R}(f, D) & = \dfrac{1}{|D|} \sum_{(x, y) \in D} -\log (\prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } \exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) ) \\
+                            & = \dfrac{1}{|D|} \sum_{(x, y) \in D} \sum_{i=1}^{d}  -\left(\log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } \exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )\right) \\
+                            & = \dfrac{1}{|D|} \sum_{(x, y) \in D} \sum_{i=1}^{d}  -\left(\log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} }) + \log(\exp( -\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2 )) \right) \\
+                            & = \dfrac{1}{|D|} \sum_{(x, y) \in D} \sum_{i=1}^{d} -\log (\frac{1}{(2\pi\sigma_{ii}^{2})^{1/2}}) - \log(\exp( -\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2 )) \\
+                            & = \dfrac{1}{|D|} \sum_{(x, y) \in D} \sum_{i=1}^{d} -\log ( (2\pi\sigma_{ii}^{2})^{-1/2} ) - \left( -\left(\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2\right) \right) \\
+                            & = \dfrac{1}{|D|} \sum_{(x, y) \in D} \sum_{i=1}^{d} \dfrac{1}{2} \log ( 2\pi\sigma_{ii}^{2} ) + \dfrac{1}{2\sigma_{ii}^{2}} (x_{i} - \mu)^{2} \\
+                            & = \dfrac{1}{2|D|} \sum_{(x, y) \in D} \sum_{i=1}^{d} \log( 2\pi\sigma_{ii}^{2}) + \dfrac{1}{\sigma_{ii}^{2}}(x_{i}-\mu)^{2}
+                        \end{split}
+                    \end{equation*}
+                 
+                % Let's check my math before we try to work out the derivatives! 
+            	\item Solve analytically. (Come back to this soon.)
+                
+            \end{enumerate}
+           
+    \end{enumerate}
+\end{solution}
 
 
-\begin{problem}{3.3(b)}
-With which one of these approaches, and in which scenario, are we likely to be over-fitting (i.e. memorizing the noise in our data)?
-\end{problem}
-\begin{proof}
-Parzen
-\end{proof}
 
-\begin{problem}{3.3(c)}
-Hyperparam vs param
-\end{problem}
+%%% NOTE: I think the math works out, but please sanity check me! I took what you did and went a bit further.
+%\begin{problem}{3.4(c)}
+%Using − log p(x) as the loss, write down the equation correspond- ing to the empirical risk minimization on the training set D
+%\end{problem}
+%\begin{proof}
+%From part b, we have
+%\begin{equation*}
+%p(\bm{x}) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
+%\end{equation*}
 
-\begin{proof}
-to do
-\end{proof}
+%\begin{equation*}
+%-log p(X) = -log (\prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
+%\end{equation*}
+%\begin{equation*}
+%-log p(X) =\sum_{i=1}^{d}  -log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
+%\end{equation*}
 
+%\begin{equation*}
+%-log p(X) = \sum_{i=1}^{d}  -log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } - \sum_{i=1}^{d} log(exp( -(\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) ))
+%\end{equation*}
 
-%%%%%%%% part 3.4 %%%%%%%%
-\begin{problem}{3.4 (a)}
-Express the equation of a diagonal Gaussian density in Rd. Specify what are its parameters and their dimensions.
-\end{problem}
+%\begin{equation*}
+%-log p(X) = \sum_{i=1}^{d} log ((2\pi \sigma_{ii}^2)^{1/2}  + \sum_{i=1}^{d}  (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
+%\end{equation*}
 
-\begin{proof}
-\begin{equation*}
-\prod_{i=1}^{D} (2\pi \sigma_{i})^{\frac{1}{2}} exp\{{- \sum_{i=1}^{D}} \frac{1}{2 \sigma_{i} ^2} (x_{i} - \mu_{i})^2 \} 
-\end{equation*}
-\end{proof}
+%\begin{equation*}
+%\hat{R}(f, D) = \frac{1}{\abs{D}} \sum_{(x , y)\in D} L(f(x), y)
+%\end{equation*}
+%\begin{equation*}
+%\hat{R}(f, D) = \frac{1}{\abs{D}} \sum_{(x , y)\in D} -log(p(X))
+%\end{equation*}
 
+%\begin{equation*}
+%\hat{R}(f, D) =\frac{1}{\abs{D}} \sum_{(x , y)\in D} \sum_{i=1}^{d} log ((2\pi \sigma_{ii}^2)^{1/2}  + \sum_{i=1}^{d}  (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
+%\end{equation*}
 
-\begin{problem}{3.4 (b)}
-Show that the components of a random vector following a diagonal Gaussian distribution are independent random variables.
-\end{problem}
-
-\begin{proof}
-First, let us walk through the idea. We would like to prove the independence by proving that the product of each normal distribution's density function made up of the each component of the random vector is equal to the diagonal Gaussian distribution's density function, namely the random vector's density distribution. \\
-The Gaussian density function for dataset $D$ is defined as \\
-
-\begin{equation*}
-%\begin{split}
-p(\bm{x}) = \mathcal{N}_{\mu, \Sigma}(\bm{x}) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} exp(-\frac{1}{2}(\bm{x} - \mu)^T \Sigma^{-1} (\bm{x} - \mu)) 
-\end{equation*}
-
-Since we have a diagonal $\Sigma$, it can be written in the form of a summation of the diagonal terms in the power, and then transformed into a product of exponents. Note that $\sigma_{ii}$ here refers to the diagonal terms.
-
-\begin{equation*}
-p(\bm{x}) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} exp(\sum_{i=1}^{d} -\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
-\end{equation*}
-
-\begin{equation*}
-p(\bm{x}) = \frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}} \prod_{i=1}^{d} exp -(\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2)
-\end{equation*}
-
-we can also express the constant term in a product form
-
-\begin{equation*}
-\frac{1}{(2\pi)^{d/2}\sqrt{det(\Sigma)}}  = \prod_{i=1}^{d} \frac{1}{(2\pi)^{1/2} \sigma_{ii} } =  \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} }
-\end{equation*}
-
-also, note that the determinant of a diagonal matrix is the product of the diagonal terms
-
-\begin{equation*}
-det(\Sigma) = \prod_{i=1}^{d} \sigma_{ii}^2
-\end{equation*}
-
-Now, we have the expression for $p(\bm{x})$
-\begin{equation*}
-p(\bm{x}) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } \prod_{i=1}^{d} exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
-\end{equation*}
-
-Note that $\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2)$ is a Gaussian of $\mathcal{N}(\sigma_{ii}, \mu)$
-
-Therefore, we have
-
-\begin{equation*}
-p(\bm{x}) = \prod_{i =1}^{d} \mathcal{N}(\sigma_{ii}, \mu)
-\end{equation*}
-
-\end{proof}
-
-\begin{problem}{3.4(c)}
-Using ? log p(x) as the loss, write down the equation correspond- ing to the empirical risk minimization on the training set D
-\end{problem}
-\begin{proof}
-From part b, we have
-\begin{equation*}
-p(\bm{x}) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
-\end{equation*}
-
-\begin{equation*}
--log p(X) = -log (\prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
-\end{equation*}
-\begin{equation*}
--log p(X) =\sum_{i=1}^{d}  -log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
-\end{equation*}
-
-\begin{equation*}
--log p(X) = \sum_{i=1}^{d}  -log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } - \sum_{i=1}^{d} log(exp( -(\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) ))
-\end{equation*}
-
-\begin{equation*}
--log p(X) = \sum_{i=1}^{d} log ((2\pi \sigma_{ii}^2)^{1/2}  + \sum_{i=1}^{d}  (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
-\end{equation*}
-
-\begin{equation*}
-\hat{R}(f, D) = \frac{1}{\abs{D}} \sum_{(x , y)\in D} L(f(x), y)
-\end{equation*}
-\begin{equation*}
-\hat{R}(f, D) = \frac{1}{\abs{D}} \sum_{(x , y)\in D} -log(p(X))
-\end{equation*}
-\begin{equation*}
-\hat{R}(f, D) =\frac{1}{\abs{D}} \sum_{(x , y)\in D} \sum_{i=1}^{d} log ((2\pi \sigma_{ii}^2)^{1/2}  + \sum_{i=1}^{d}  (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
-\end{equation*}
-
-\end{proof}
+%\end{proof}
 
 \end{document}
