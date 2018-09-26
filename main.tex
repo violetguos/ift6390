@@ -1,11 +1,39 @@
-\documentclass{article} 
+\documentclass[letterpaper, 12pt]{article} 
 
 \usepackage[margin=0.75in]{geometry}
 \usepackage{tabularx}
 \usepackage{amsmath,amsthm,amssymb,enumerate,graphicx,leading}
-\usepackage{amsmath,amsthm,amssymb,amsfonts, physics,bbold, bm, fancyvrb}
+\usepackage{amsfonts, physics, bbold, bm, fancyvrb}
 \usepackage{listings}
 \usepackage{color}
+
+\usepackage{fullpage} %Package to use full page
+\usepackage{relsize}
+\usepackage{palatino} % this has a bigger font
+
+%%%%
+
+% \usepackage{amssymb}  %For \therefore
+% \usepackage{fullpage} %Package to use full page
+% \usepackage{parskip} %Package to tweak paragraph skipping
+% \usepackage{tikz} %Package for drawing
+% \usepackage{amsmath}
+% \usepackage{hyperref}
+% \usepackage{palatino}
+% \usepackage{amsmath} %To split long equations
+% %More custom packages (default or by Christopher) 
+% \usepackage{amssymb}
+% \usepackage{bm}
+% \usepackage{multirow} %Used to merge multiple tables cells along a row
+% \usepackage{mathtools} %Double vertical bars for norms
+% \usepackage{physics} %Partial derivatives
+% \usepackage{tabularx}
+% \usepackage{booktabs}
+% \usepackage{relsize}
+% \usepackage{wrapfig}
+% \usepackage{cite}
+% \usepackage{neuralnetwork}
+%%%%
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -51,10 +79,10 @@
 %Or just google stuff
  
 \title{IFT 6390 Homework 1}
-\author{Arlie Coles (20121051) and Violet Guo ()}
+\author{Arlie Coles (20121051) and Yue (Violet) Guo (20120727)}
 \maketitle
 
-%%% Problem 1 - please double check my math! Bayes' rule is apparently hard ;) %%%
+%%% Problem 1 %%%
 \begin{problem}
 Small exercise on probabilities.
 \end{problem}
@@ -68,17 +96,21 @@ Small exercise on probabilities.
      \end{itemize}
      
      Then, to find the probability that a woman who has received a positive result actually has cancer, $P(C|T)$, we apply Bayes' Rule:
+
      \begin{equation*}
      	\begin{split}
      		P(C|T) & = \dfrac{P(T|C)P(C)}{P(T)}\\
-     		& = \dfrac{(0.87)(0.015)}{(0.87+0.096)}\\
-            & = 0.0135
+            &= \dfrac{P(T|C)P(C)}{P(T|\neg C)P(\neg C) + P(T | C) + P(C) }\\
+     		& = \dfrac{(0.87)(0.015)}{(0.87 \times 0.015 +0.096 \times (1- 0.015))}\\
+            & = 0.01213
         \end{split}
      \end{equation*}
-     
+
      Therefore, the doctors surveyed ought to have responded with \textit{F) Less than 10\%}.
      
 \end{solution}\
+
+\pagebreak
 
 %%% Problem 2 %%%
 \begin{problem}
@@ -147,6 +179,8 @@ Curse of dimensionality and geometric intuition in higher dimensions.
     \end{enumerate}
 \end{solution}
 
+\pagebreak
+
 %%% Problem 3 %%%
 \begin{problem}
 Parametric Gaussian density estimation vs. Parzen window density estimation
@@ -159,7 +193,7 @@ Parametric Gaussian density estimation vs. Parzen window density estimation
             	\item An isotropic Gaussian has two parameters:
                 	\begin{itemize}
                     	\item $\mu$, the mean, of dimension $d$, and
-                        \item $\sigma^{2}$, the variance, of dimension $1$. (Note that the covariance matrix $\Sigma$ is of dimension $d \times d$, where the diagonal terms are all $\sigma^{2}$.)
+                        \item $\sigma^{2}$, the variance, of dimension $1$. (Note that the covariance matrix $\Sigma$ is of dimension $d \times d$, where the diagonal terms are all equal to one $\sigma^{2}$ value.)
                     \end{itemize}
                     
                  \item For calculating the mean:
@@ -181,7 +215,7 @@ Parametric Gaussian density estimation vs. Parzen window density estimation
 \lstset{language=} % This removes syntax highlighting which we don't need for such simple pseudocode                  
 \begin{lstlisting}
 for i = 1 to n:																				\\ O(n)
-	add x_i to the running total, which has d components							\\ O(d)
+	add x_i to the running total, which has d components		\\ O(d)
 \end{lstlisting}
 					This is $O(nd)$.
                 
@@ -193,10 +227,9 @@ for i = 1 to n:																				\\ O(n)
     take its transpose																		\\ O(1)
     multiply the resulting dx1 and 1xd vectors to get a dxd matrix		\\ O(d^2)    				
 \end{lstlisting}
-					This is $O(n(d+d+1+d^{2})) = O(n(d+d^{2}))$.
-                    % You had: "Total is $O(nd^2 + d + d ) = O(nd^2)$"
+					This is $O(n(d+d+1+d^{2})) = O(n(d+d^{2})) \approx O(nd^2)$.
                     
-                    The complexity of calculating both parameters is then $O(nd + nd + nd^{2}) = O(nd + nd^{2}) = O(n(d+d^{2}))$.
+                    The complexity of calculating both parameters is then $O(nd + nd + nd^{2}) = O(nd + nd^{2}) = O(n(d+d^{2})) \approx O(nd^2)$.
                  
                  \item The probability density function is:
                  	\begin{equation*}
@@ -213,14 +246,20 @@ for i = 1 to n:																				\\ O(n)
     	\item %%% Parzen density %%%
         	\begin{enumerate}[(a)]
             	\item The ``training/learning'' phase for the Parzen method consists of loading each training point. We center each kernel Gaussian on each training point, which becomes the $\mu$ of the Gaussian, whose $\sigma$ is predefined.
-                % You had "Center at each $x$, calculate normal density function with $\sigma$" but I think the calculating is part of testing? 
-                
+                 
                 \item The probability density function is:
                 	\begin{equation*}
-                    	\hat{p}_{Parzen}(x) = \sum_{i = 1}^{n} \frac{1}{(2\pi)^{d/2}\sigma^{d}} \exp(\frac{-1}{2} \frac{||x - \mu||^2}{\sigma})
+                    	\hat{p}_{Parzen}(x) = \sum_{i = 1}^{n} \frac{1}{(2\pi)^{d/2}\sigma^{d}} \exp(\frac{-1}{2} \frac{||x - \mu||^2}{\sigma^2})
                     \end{equation*}
                     
-                \item The complexity for calculating a prediction is $O(nd)$, since we must perform the $x - \mu$ subtraction, which deals with $d$ components, $n$ times. % I wonder if squaring the x - mu vector adds complexity?
+                \item The complexity for calculating a prediction is $O(nd)$, since we must perform the $x - \mu$ subtraction, which deals with $d$ components, $n$ times.
+
+                \begin{lstlisting}
+for each x_i where i = 1 to n:											\\ O(n)
+	calculate x_i - mu, which has d components						\\ O(d)
+    square operation x_i - mu, which has d components				\\ O(d)
+    
+				\end{lstlisting}
                     
             \end{enumerate}
         
@@ -230,17 +269,34 @@ for i = 1 to n:																				\\ O(n)
                 
                 \item The Parzen approach is also more likely to overfit and memorize noise, for the same reason. Its direct incorporation of the location of each datapoint as summands to the final density curve means that noise will contribute just as well to the final density curve as the good data, while the parametric Gaussian approach generalizes this effect somewhat by using averages over the whole dataset and conforming to a less-nuanced shape.
                 
-                \item Hyperparameter question - to be answered.
+                \item 
+                \textit{Parameters} are learned by the algorithm from training data, whereas \textit{hyperparameters} are assigned by the user, and validated on training and validation data. For example, in the parametric Gaussian density function questions below, we can optimize our $\mu$ parameter by finding the log error and taking derivatives, and this feedback process and learning of the parameter is the use case for the Gaussian modelling framework. By contrast, this Parzen framework involves the user observing the dataset and deciding what is the best $\sigma$ value by ``tuning" its value until a satisfactory result emerges. These types of algorithms must have users to set hyperparameters, because there is no efficient way of optimizing the function iteratively (e.g., in this case, the function is not convex). 
+                % Not sure about this part, let's discuss tomorrow! The test, which is a sum of Gaussians, is noisy. Another example is KNN, where we have discussed in lecture that the iterative optimization problem is NP-hard.
             \end{enumerate}
         
-        \item %%% Diagonal Gaussians - please have a look here! I think there may be a sigma vs sigma-squared issue, or I may just not be following the math correctly.
+        \item  Diagonal Gaussians
+		% I like the matrices, but let's go through deriving your product notation just to be sure, for my sake
         	\begin{enumerate}[(a)]
             	\item To derive the equation of a diagonal Gaussian density with dimension $d$, we can start with the general Gaussian density:
                 
                 	\begin{equation*}
                     	p(x) = \dfrac{1}{(2\pi)^{d/2} \sqrt{|\Sigma|}} \exp(\frac{-1}{2}(x-\mu)^{T}\Sigma^{-1}(x-\mu))
                     \end{equation*}
-                    
+                 where \[ \Sigma = \begin{bmatrix} 
+    					\sigma_{11}^2 & 0 & \dots & 0 \\
+    					0 &  \sigma_{ii}^2 & 0 & 0\\
+                        \vdots & \ddots & \ddots  & 0 \\
+   						 0 &   \dots &  0  & a_{dd}^2 
+    					\end{bmatrix}
+                 \]
+                 and where
+                 \[ \Sigma^{-1} = \begin{bmatrix} 
+    					\dfrac{1}{\sigma_{11}^2} & 0 & \dots & 0 \\
+    					0 & \dfrac{1}{\sigma_{ii}^2} & 0 & 0\\
+                        \vdots & \ddots & \ddots  & 0 \\
+   						 0 &   \dots &  0  & \dfrac{1}{\sigma_{dd}^2 }\\
+    					\end{bmatrix}
+                 \]
                 Then, since the only filled positions in the $\Sigma$ matrix are the diagonals, we can manually represent the matrix multiplication while skipping the calculations in the matrix multiplication that do not interact with that diagonal:
                 	\begin{equation*}
                 		p(x) = \dfrac{1}{(2\pi)^{d/2} \sqrt{|\Sigma|}} \exp( \frac{-1}{2} \sum_{i=1}^{d} \frac{1}{\sigma_{ii}^{2}} (x_{i} - \mu_{i})^{2} )
@@ -251,15 +307,15 @@ for i = 1 to n:																				\\ O(n)
                 \begin{equation*}
                 	\begin{split}
                     	p(x) & = \dfrac{1}{(2\pi)^{d/2} \prod_{i=1}^{d} \sigma^{2}_{ii}} \exp( \frac{-1}{2} \sum_{i=1}^{d} \frac{1}{\sigma_{ii}^{2}} (x_{i} - \mu_{i})^{2} ) \\
-                        & = \prod_{i=1}^{d} \frac{1}{(2\pi)^{1/2} \sigma_{ii} } \exp( \frac{-1}{2} \sum_{i=1}^{d} \frac{1}{\sigma_{ii}^{2}} (x_{i} - \mu_{i})^{2} ) \\
-                        & = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } \exp( \frac{-1}{2} \sum_{i=1}^{d} \frac{1}{\sigma_{ii}^{2}} (x_{i} - \mu_{i})^{2} )
+                        & = (\prod_{i=1}^{d} \frac{1}{(2\pi)^{1/2} \sigma_{ii} }) \exp( \frac{-1}{2} \sum_{i=1}^{d} \frac{1}{\sigma_{ii}^{2}} (x_{i} - \mu_{i})^{2} ) \\
+                        & = (\prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} }) \exp( \frac{-1}{2} \sum_{i=1}^{d} \frac{1}{\sigma_{ii}^{2}} (x_{i} - \mu_{i})^{2} )
                     \end{split}
                 \end{equation*}
                 
-                	%%% I'm not sure how to make this (your original equation) work-- maybe missing a negative in the exponent?
-                	%\begin{equation*}
-						%\prod_{i=1}^{D} (2\pi \sigma_{i})^{\frac{1}{2}} \exp(- 							\sum_{i=1}^{D} \frac{1}{2 \sigma_{i} ^2} (x_{i} - \mu_{i})^2 ) 
-					%\end{equation*}
+                
+%                 \begin{equation*}
+% 						\prod_{i=1}^{D} (2\pi \sigma_{i})^{\frac{1}{2}} \exp(- 							\sum_{i=1}^{D} \frac{1}{2 \sigma_{i} ^2} (x_{i} - \mu_{i})^2 ) 
+% 					\end{equation*}
                     
                     The parameters of the diagonal Gaussian are:
                     \begin{itemize}
@@ -333,52 +389,113 @@ for i = 1 to n:																				\\ O(n)
                         \end{split}
                     \end{equation*}
                  
-                % Let's check my math before we try to work out the derivatives! 
-            	\item Solve analytically. (Come back to this soon.)
-                
-            \end{enumerate}
-           
+                % Let's go over this together tomorrow just to be safe
+            	\item To find the optimal $\mu$ value, we take the derivative with respect to $\mu$:
+				\begin{equation*}
+				\begin{split}
+				\pdv{}{\mu_{i}} &= \dfrac{1}{2|D|} \sum_{(x,y) \in D} \sum_{i = 1}^{d} \frac{1}{ \sigma_{ii}^2}2(- x_{i}^{(j)} + \mu_{i})   \\
+				&=\dfrac{1}{|D|} \sum_{(x,y) \in D}  \sum_{i = 1}^{d} \frac{1}{\sigma_{ii} ^2}
+						(- x_{i}^{(j)} + \mu_{i})  \\
+				\end{split}
+				\end{equation*}
+
+Setting $\pdv{}{\mu_{ki}} = 0 $, we have:
+
+\begin{equation*}
+\begin{split}
+\dfrac{1}{|D|}\sum_{(x,y) \in D} \sum_{i = 1}^{d} \frac{1}{\sigma_{ii} ^2}
+		(- x_{i}^{(j)} + \mu_{i})  &= 0 \\
+\sum_{(x,y) \in D} \sum_{i = 1}^{d} \frac{1}{\sigma_{ii} ^2}  x_{i} &=\sum_{(x,y) \in D} \sum_{i = 1}^{d} \frac{1}{\sigma_{ii} ^2} \mu_{i}   \\
+\mu_{i} &=  x_{i}^{(j)} \\
+\end{split}
+\end{equation*}
+
+Therefore, the optimal $\mu$ value is $x_{i}^{(j)}$.
+
+Now, to find the optimal $\sigma^{2}$ value, we take the derivative with respect to $\sigma^{2}$:
+
+%\begin{equation*}
+%\begin{split}
+%\pdv{}{\sigma_{ii} ^2} &= \sum_{(x,y) \in D} \sum_{i = 1}^{d} - \frac{1}{2}(x_{i}^{(j)} - \mu_{i})^2 \frac{1}{\sigma_{ii} ^4} + \frac{1}{2}\sum_{j = 1}^{n} \sum_{i = 1}^{d} \frac{2 \pi}{2\pi \sigma_{ii} ^2}\\
+%&=  \sum_{j = 1}^{n} \sum_{i = 1}^{d} - \frac{1}{2}(x_{i}^{(j)} - \mu_{i})^2 \frac{1}{\sigma_{i} ^4} + \frac{1}{2}\sum_{j = 1}^{n} \sum_{i = 1}^{d} \frac{1}{ \sigma_{i} ^2}\\
+%&= \sum_{j = 1}^{n}  \sum_{i = 1}^{d} \frac{1}{2} [ -(x_{i}^{(j)} - \mu_{i})^2 \frac{1}{\sigma_{i} ^4} + \frac{1}{\sigma_{i} ^2}]\\
+%\end{split}
+%\end{equation*}
+ 
+ \begin{equation*}
+ \begin{split}
+ 	\pdv{}{\sigma_{ii}^{2}} & = \dfrac{1}{2|D|} \sum_{(x,y) \in D} \sum_{i=1}^{d} \dfrac{1}{2\pi\sigma^{2}_{ii}}2\pi - \dfrac{1}{\sigma_{ii}^{4}}(x_{i}^{(j)} + \mu_{i})\\
+    & = \dfrac{1}{2|D|} \sum_{(x,y) \in D} \sum_{i=1}^{d} \dfrac{1}{\sigma_{ii}^{2}} - \dfrac{(x_{i}^{(j)} - \mu_{i})}{\sigma_{ii}^{4}}
+ \end{split}
+ \end{equation*}
+ 
+ Setting $\pdv{}{\sigma_{i} ^2}$ to zero, we have:
+
+%\begin{equation*}
+% \begin{split}
+% \sum_{j = 1}^{n}\sum_{i = 1}^{d} (x_{i} - \mu_{i})^2 \frac{1}{\sigma_{i} ^4} 
+%	&=\sum_{j = 1}^{n} \sum_{i=1}^{d}  \frac{1}{\sigma_{i} ^2}\\
+%\sum_{j = 1}^{n}\sum_{i = 1}^{d} (x_{i} - \mu_{i})^2 
+% &= \sum_{j = 1}^{n}\sum_{i=1}^{d}  \sigma_{i} ^2\\
+%\sigma_{i}^2 &= \frac{\sum_{j = 1}^{n} \sum_{i = 1}^{d} (x_{i} - \mu_{i})^2}{\sum_{j %= 1}^{n}\sum_{i=1}^{d}}\\
+%\sigma_{i}^2 &= (x_{i} - \mu_{i})^2\\
+%\end{split}
+%\end{equation*}
+
+\begin{equation*}
+\begin{split}
+	\dfrac{1}{2|D|} \sum_{(x,y) \in D} \sum_{i=1}^{d} \dfrac{1}{\sigma_{ii}^{2}} - \dfrac{(x_{i}^{(j)} - \mu_{i})}{\sigma_{ii}^{4}} & = 0 \\
+    \dfrac{1}{2|D|} \sum_{(x,y) \in D} \sum_{i=1}^{d} \dfrac{1}{\sigma_{ii}^{2}} & = \dfrac{1}{2|D|} \sum_{(x,y) \in D} \sum_{i=1}^{d} \dfrac{(x_{i}^{(j)} - \mu_{i})^{2}}{\sigma_{ii}^{4}} \\
+    \dfrac{1}{\sigma_{ii}^{2}} & = \dfrac{(x_{i}^{(j)} - \mu_{i})^{2}}{\sigma_{ii}^{4}} \\
+    \sigma_{ii}^{4} & = \sigma_{ii}^{2}(x_{i}^{(j)} - \mu_{i})^{2} \\
+    \sigma_{ii}^{2} & = (x_{i}^{(j)} - \mu_{i})^{2}
+\end{split}
+\end{equation*}
+
+Therefore, the optimal $\sigma^{2}$ value is $(x_{i} - \mu_{i})^{2}$.
+
+
     \end{enumerate}
+       \end{enumerate}
 \end{solution}
 
 
-
 %%% NOTE: I think the math works out, but please sanity check me! I took what you did and went a bit further.
-%\begin{problem}{3.4(c)}
-%Using − log p(x) as the loss, write down the equation correspond- ing to the empirical risk minimization on the training set D
-%\end{problem}
-%\begin{proof}
-%From part b, we have
-%\begin{equation*}
-%p(\bm{x}) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
-%\end{equation*}
+% \begin{problem}{3.4(c)}
+% Using − log p(x) as the loss, write down the equation correspond- ing to the empirical risk minimization on the training set D
+% \end{problem}
+% \begin{proof}
+% From part b, we have
+% \begin{equation*}
+% p(\bm{x}) = \prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) 
+% \end{equation*}
 
-%\begin{equation*}
-%-log p(X) = -log (\prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
-%\end{equation*}
-%\begin{equation*}
-%-log p(X) =\sum_{i=1}^{d}  -log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
-%\end{equation*}
+% \begin{equation*}
+% -log p(X) = -log (\prod_{i=1}^{d} \frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
+% \end{equation*}
+% \begin{equation*}
+% -log p(X) =\sum_{i=1}^{d}  -log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } exp (-\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
+% \end{equation*}
 
-%\begin{equation*}
-%-log p(X) = \sum_{i=1}^{d}  -log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } - \sum_{i=1}^{d} log(exp( -(\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) ))
-%\end{equation*}
+% \begin{equation*}
+% -log p(X) = \sum_{i=1}^{d}  -log (\frac{1}{(2\pi \sigma_{ii}^2)^{1/2} } - \sum_{i=1}^{d} log(exp( -(\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) ))
+% \end{equation*}
 
-%\begin{equation*}
-%-log p(X) = \sum_{i=1}^{d} log ((2\pi \sigma_{ii}^2)^{1/2}  + \sum_{i=1}^{d}  (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
-%\end{equation*}
+% \begin{equation*}
+% -log p(X) = \sum_{i=1}^{d} log ((2\pi \sigma_{ii}^2)^{1/2}  + \sum_{i=1}^{d}  (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
+% \end{equation*}
 
-%\begin{equation*}
-%\hat{R}(f, D) = \frac{1}{\abs{D}} \sum_{(x , y)\in D} L(f(x), y)
-%\end{equation*}
-%\begin{equation*}
-%\hat{R}(f, D) = \frac{1}{\abs{D}} \sum_{(x , y)\in D} -log(p(X))
-%\end{equation*}
+% \begin{equation*}
+% \hat{R}(f, D) = \frac{1}{\abs{D}} \sum_{(x , y)\in D} L(f(x), y)
+% \end{equation*}
+% \begin{equation*}
+% \hat{R}(f, D) = \frac{1}{\abs{D}} \sum_{(x , y)\in D} -log(p(X))
+% \end{equation*}
 
-%\begin{equation*}
-%\hat{R}(f, D) =\frac{1}{\abs{D}} \sum_{(x , y)\in D} \sum_{i=1}^{d} log ((2\pi \sigma_{ii}^2)^{1/2}  + \sum_{i=1}^{d}  (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
-%\end{equation*}
+% \begin{equation*}
+% \hat{R}(f, D) =\frac{1}{\abs{D}} \sum_{(x , y)\in D} \sum_{i=1}^{d} log ((2\pi \sigma_{ii}^2)^{1/2}  + \sum_{i=1}^{d}  (\frac{1}{2 \sigma_{ii}^2}(x_i - \mu)^2) )
+% \end{equation*}
 
-%\end{proof}
+% \end{proof}
 
 \end{document}
