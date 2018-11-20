@@ -5,14 +5,13 @@ import os
 import csv
 
 currPath = os.getcwd()
-with open(os.path.join(currPath, 'test_predicted.pickle'), 'rb') as jar:
+with open(os.path.join(currPath, 'test_predicted_cross_val.pickle'), 'rb') as jar:
   y_test = pickle.load(jar)
 
 
 # get the one - to one mapping for labels to one hot
 table_labels = pd.read_csv('./all/train_labels.csv')
 label_list = table_labels.Category.unique().tolist()
-print(label_list)
 
 
 # from one hot encoding back to the category name for test pickle
