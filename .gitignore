@@ -6,6 +6,16 @@ train-images-idx3-ubyte.gz
 t10k-labels-idx1-ubyte.gz
 train-labels-idx1-ubyte.gz
 
+
+
+##### kaggle data #####
+*.npz
+*.npy
+**/all/ #anything named all
+*.csv
+*.pickle 
+*.txt
+
 #########Latex############
 ## Core latex/pdflatex auxiliary files:
 *.aux
