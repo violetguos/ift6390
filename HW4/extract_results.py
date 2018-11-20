@@ -1,3 +1,9 @@
+# Get the pickle of test results from Google
+# build a CSV file locally
+# don't wanna use too much big brother's memory
+# TODO: make it into a function with argparser and shell script!
+
+
 import pandas as pd
 import numpy as np
 import pickle
