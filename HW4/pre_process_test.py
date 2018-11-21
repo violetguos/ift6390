@@ -1,7 +1,11 @@
 # to reduce noise in the test data of 10,000
+# We have done similar thing to the 9000 train data on google
+# taking it offline b/c limited memory
+# also we only pickle it once!!
 
-# input: npy binary files
+# input: test data npy binary files
 # output: pickle, centered, pre-processed test data
+# output goes to current path you are at
 
 import pandas as pd
 import numpy as np
