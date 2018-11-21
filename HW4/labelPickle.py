@@ -14,7 +14,6 @@ just load a pickle instead of re-reading the big NPY file
 FORMAT: these pickle are of shape (N,), Category_nums, not onehot or strings
 See the one hot encoded labels under oneHotLabel.py
 '''
-# TODO: PICKLE the one hot encoded labels!!
 
 
 PICKLE_DATA_PATH = './pickle_data/'

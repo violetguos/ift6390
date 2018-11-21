@@ -10,6 +10,18 @@ import os
 import cv2
 
 
+'''
+experiment of data augmentation using imgaug library
+permute each image NUM_PERM times, and append its data, and labels
+
+
+NOTE: permute refers to the randomness in the image augmentation, e.g.
+degrees of rotation, etc, not the order of image array itself.
+
+program takes a while to run
+
+'''
+
 
 # define the constants
 DATA_PATH = './pickle_data/'
@@ -271,7 +283,7 @@ if __name__== "__main__":
 
     train_data, valid_data = data_loader()
     print("start load data", train_data.shape)
-    
+
     #train_data = train_data
     #valid_data = valid_data
 

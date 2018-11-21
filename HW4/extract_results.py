@@ -1,13 +1,14 @@
-# Build csv submission file
-# from the pickle of test results from Google
-# build a CSV file locally
-# don't wanna use too much big brother's memory
-# Pickle contains one-hot predictions
+'''
+Build csv submission file
+from the pickle of test results from Google
+build a CSV file locally
+don't wanna use too much big brother's memory
+Pickle contains one-hot predictions
 
-# one hot -> index -> string of corresponding index in the category names
+one hot -> index -> string of corresponding index in the category names
 
-# TODO: make it into a function with argparser and shell script!
-
+file will go to current path you are at, may not be the best practice
+'''
 
 import pandas as pd
 import numpy as np
